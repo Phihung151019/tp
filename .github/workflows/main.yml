@@ -1,0 +1,31 @@
+name: Build and Upload Artifact
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Make build script executable
+        run: chmod +x build.sh
+
+      - name: Run build script
+        run: ./build.sh
+
+      # Bước mới: Upload sản phẩm sau khi build
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-build-output  # Tên của file artifact khi tải về
+          path: |
+            build/*
+          # Bạn có thể chỉ định thư mục (dist/) hoặc file cụ thể
+          
+          retention-days: 5 # Tự động xóa sau 5 ngày để tiết kiệm dung lượng
